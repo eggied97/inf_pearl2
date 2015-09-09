@@ -7,71 +7,70 @@ from util import words
 from dup import remove_dups
 
 def make_table(pairs):
-    sortedPairs = merge_pairs(pairs)
-    withoutDuplicates = remove_dups_pairs(sortedPairs)
+    sortedPairs = merge_pairs(pairs)    #sorteer eerst de binnengekomen data
+    pairs = remove_dups_pairs(sortedPairs)  #Verwijder daarna de duplicaten
 
-    pairs = withoutDuplicates
-
-    res = []
-    zelfdeWoordAndereBestand = []
+    res = []    #init de resultaat array
+    woordInDezeTextFiles = []   #init de array om de textfiles in te zetten
     fresh = ""
 
     if len(pairs) != 0:
-        fresh = pairs[0][0]
-        zelfdeWoordAndereBestand.append(pairs[0][1])
-        i = 1
+        fresh = pairs[0][0] #set het te zoeken woord op de eerste van de data
+        woordInDezeTextFiles.append(pairs[0][1])    #voeg de textfile name dan ook direct toe
+        i = 1   #En zet i op 1 want je hebt de eerste al gehad
 
-        while len(pairs) > i:
+        while i < len(pairs):
             if pairs[i][0] == fresh:
-                zelfdeWoordAndereBestand.append(pairs[i][1])
+                woordInDezeTextFiles.append(pairs[i][1]) #als het woord om te zoeken hetzelfde is, voeg de textfile name dan toe aan de array
             else:
-                res.append([fresh,zelfdeWoordAndereBestand])
-                zelfdeWoordAndereBestand = []
+                res.append([fresh,woordInDezeTextFiles]) #Er komt een nieuw woord => zet de te zoeken woord en de textfile names in de resultaat array
+                woordInDezeTextFiles = []   #Reset de textfiles namen array
 
-                fresh = pairs[i][0]
-                zelfdeWoordAndereBestand.append(pairs[i][1])
+                fresh = pairs[i][0] #Set het nieuwe te zoeken woord
+                woordInDezeTextFiles.append(pairs[i][1])    #En voeg de naam van de textfile toe aan de array
             i += 1
-        res.append(fresh)
+
+        res.append([fresh,woordInDezeTextFiles]) #Alles is nu geweest, voeg het laatste woord + textfiles nog toe
     return res
 
 def make_counted_table(data):
-    sortedPairs = merge_pairs(data)
+    pairs = merge_pairs(data) #Sorteer eerst de binnengekomen data
 
-    pairs = sortedPairs
-
-    res = []
-    zelfdeWoordAndereBestand = []
+    res = []    #init the resultaat array
+    zelfdeWoordAndereBestand = []   #init array om de count in te zetten
     fresh = ""
 
     if len(pairs) != 0:
-        fresh = pairs[0][0]
-        i = 1
+        fresh = pairs[0][0] #zet het eerste woord waar we naar gaan kijken
+        currentTextFile = pairs[0][1]; #zet het textfile naam waar het eerste woord in voor komt
+        countForHowManyInTextFile = 1;  #zet de count op 1 omdat we het eerste woord zelf hebben neergezet
 
-        currentTextFile = pairs[0][1];
-        countForHowManyInTextFile = 1;
+        i = 1   #set i op 1 omdat we de eerste woord handmatig hebben gedaan
 
-        while len(pairs) > i:
+        while i < len(pairs):   #ga door tot het eind
             if pairs[i][0] == fresh:
                 if pairs[i][1] == currentTextFile:
-                    countForHowManyInTextFile += 1
+                    countForHowManyInTextFile += 1 #Als het woord het zelfde is, en je zit nog in hetzelfde bestand, doe de counter +1
                 else:
-                    zelfdeWoordAndereBestand.append([currentTextFile,countForHowManyInTextFile])
-                    currentTextFile = pairs[i][1]
-                    countForHowManyInTextFile = 1
+                    zelfdeWoordAndereBestand.append([currentTextFile,countForHowManyInTextFile]) #Als we niet meer in hetzelfde textbestand zitten zetten we de counter in de array, om later te sorteren
+                    currentTextFile = pairs[i][1]   #set de huidige textfile naam
+                    countForHowManyInTextFile = 1   #Doe de counter op 1, omdat we hem handmatig hebben ingesteld
 
             else:
-                #sorteer zelfdeWoordAnderBestand op de i=1
-                zelfdeWoordAndereBestand = sortVanGrootNaarKlein(zelfdeWoordAndereBestand)
+                zelfdeWoordAndereBestand = sortVanGrootNaarKlein(zelfdeWoordAndereBestand) #er komt een nieuw woord aan bod, dus sorteer de count-array van het laatste woord
 
-                res.append([fresh,zelfdeWoordAndereBestand])
-                zelfdeWoordAndereBestand = []
+                res.append([fresh,zelfdeWoordAndereBestand]) #Voeg deze lijst toe aan de resultaat array
+                zelfdeWoordAndereBestand = []   #reset de array voor de counters
 
-                fresh = pairs[i][0]
-                currentTextFile = pairs[0][1];
-                countForHowManyInTextFile = 1;
+                fresh = pairs[i][0] #Set het nieuwe zoekwoord
+                currentTextFile = pairs[0][1];  #En het textbestand waar we nu in zoeken
+                countForHowManyInTextFile = 1;  #En zet de counter op 1 omdat we hem zelf al hebben gecount
 
             i += 1
-        res.append(fresh)
+
+        #Omdat alle woorden nu zijn geweest zitten we aan onze maximale lengte, maar het laatste woord moet nog wel aan de array toegevoegt worden:
+        zelfdeWoordAndereBestand = sortVanGrootNaarKlein(zelfdeWoordAndereBestand)
+        res.append([fresh,zelfdeWoordAndereBestand])
     return res
 
 def make_density_table(data):

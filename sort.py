@@ -88,7 +88,7 @@ def sortVanGrootNaarKlein(data):
         fi = 0
         si = 0
 
-        while len(fst) > fi and len(snd) > si:
+        while fi < len(fst) and si < len(snd):
             if fst[fi][1] > snd[si][1] or fst[fi][1] == snd[si][1] and fst[fi][0] < snd[si][0]:
                 res.append(fst[fi])
                 fi += 1
@@ -96,10 +96,10 @@ def sortVanGrootNaarKlein(data):
                 res.append(snd[si])
                 si += 1
 
-        if len(fst) > fi:
+        if fi < len(fst):
            res.extend(fst[fi:])
 
-        if len(snd) > si:
-            res.extend(snd[si:])
+        if si < len(snd):
+           res.extend(snd[si:])
 
     return res
