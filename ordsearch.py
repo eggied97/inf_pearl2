@@ -20,6 +20,18 @@ def linear(data, value):
         # yes, we found the value; return the index
         return i
 
+
+def linearPairs(data, value):
+
+    i = 0
+    while i < len(data) and data[i][0] != value:
+        i = i + 1
+
+    if i == len(data) :
+        return -1
+    else:
+        return i
+
 def binary(data,value):
 
     high = len(data)-1
@@ -50,7 +62,7 @@ def binary_pairs(data, value):
     while low <= high and data[low][0] != value:
         middle = int((high + low)/2)
 
-        if(data[middle][0] == value):
+        if data[middle][0] == value:
             low = middle
         elif data[middle][0] < value:
             low = middle +1

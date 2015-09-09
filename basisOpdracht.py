@@ -13,3 +13,5 @@ from pearl import remove_dups_pairs, make_counted_table, make_density_table
 
 #print(make_counted_table(all_word_pairs())) #eerste bonuspunt
 print(make_density_table(all_word_pairs())) #tweede bonuspujnt
+
+#make_density_table(all_word_pairs())
