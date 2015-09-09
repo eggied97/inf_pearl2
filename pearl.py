@@ -57,6 +57,10 @@ def make_counted_table(data):
                     countForHowManyInTextFile = 1   #Doe de counter op 1, omdat we hem handmatig hebben ingesteld
 
             else:
+                if len(zelfdeWoordAndereBestand) == 0:
+                    #woord is 1 keer voorgekomen in 1 tekstbestand
+                    zelfdeWoordAndereBestand.append([currentTextFile,countForHowManyInTextFile])
+
                 zelfdeWoordAndereBestand = sortVanGrootNaarKlein(zelfdeWoordAndereBestand) #er komt een nieuw woord aan bod, dus sorteer de count-array van het laatste woord
 
                 res.append([fresh,zelfdeWoordAndereBestand]) #Voeg deze lijst toe aan de resultaat array
@@ -116,6 +120,20 @@ def make_density_table(data):
 
             else:
                 #Er is nu een nieuw woord gedetecteerd
+                if len(zelfdeWoordAndereBestand) == 0:
+                    #woord is 1 keer voorgekomen in 1 tekstbestand
+                    gestorteerdeLijst = merge_pairs(woordenPerFile)
+                    indexOfTextFile = linearPairs(gestorteerdeLijst, currentTextFile)
+
+                    if indexOfTextFile != -1:
+                        totalWordCount = woordenPerFile[indexOfTextFile][1]
+                    else:
+                        totalWordCount = len(words(currentTextFile))
+                        woordenPerFile.append([currentTextFile, totalWordCount])
+                    freq = countForHowManyInTextFile / totalWordCount
+                    zelfdeWoordAndereBestand.append([currentTextFile, freq])
+
+
                 #Dus moeten we eerst de array van de tekstbestanden met de frequentie sorteren van groot naar klein
                 zelfdeWoordAndereBestand = sortVanGrootNaarKlein(zelfdeWoordAndereBestand)
 
