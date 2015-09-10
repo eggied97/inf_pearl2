@@ -65,9 +65,9 @@ def binary_pairs(data, value):
         if data[middle][0] == value:
             low = middle
         elif data[middle][0] < value:
-            low = middle +1
+            low = middle + 1
         else:
-            high = middle -1
+            high = middle - 1
 
     if high > low:
         return low

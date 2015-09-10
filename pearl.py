@@ -58,7 +58,7 @@ def make_counted_table(data):
 
             else:
                 if len(zelfdeWoordAndereBestand) == 0:
-                    #woord is 1 keer voorgekomen in 1 tekstbestand
+                    #woord is maar in 1 textfile terechtgekomen
                     zelfdeWoordAndereBestand.append([currentTextFile,countForHowManyInTextFile])
 
                 zelfdeWoordAndereBestand = sortVanGrootNaarKlein(zelfdeWoordAndereBestand) #er komt een nieuw woord aan bod, dus sorteer de count-array van het laatste woord
@@ -67,7 +67,7 @@ def make_counted_table(data):
                 zelfdeWoordAndereBestand = []   #reset de array voor de counters
 
                 fresh = pairs[i][0] #Set het nieuwe zoekwoord
-                currentTextFile = pairs[0][1];  #En het textbestand waar we nu in zoeken
+                currentTextFile = pairs[i][1];  #En het textbestand waar we nu in zoeken
                 countForHowManyInTextFile = 1;  #En zet de counter op 1 omdat we hem zelf al hebben gecount
 
             i += 1
@@ -102,14 +102,14 @@ def make_density_table(data):
                 else:
                     #check if we already have the wordCount in our Array
 
-                    gestorteerdeLijst = merge_pairs(woordenPerFile) #sorteer eerst de lijst van woorden met het totaal aantal woorden
-                    indexOfTextFile = linearPairs(gestorteerdeLijst, currentTextFile)   #zoek dan de index van het huidige textbestand
+                    indexOfTextFile = linearPairs(woordenPerFile, currentTextFile)   #zoek dan de index van het huidige textbestand
 
                     if indexOfTextFile != -1:
                         totalWordCount = woordenPerFile[indexOfTextFile][1] #als deze niet -1 is kunnen we hem gewoon opvragen
                     else:
                         totalWordCount = len(words(currentTextFile))    #als hij -1 is, kijk wat het totaal aantal woorden is
                         woordenPerFile.append([currentTextFile, totalWordCount])    #en zet deze in de array
+
 
 
                     freq = countForHowManyInTextFile / totalWordCount   #bereken de frequentie door de het getelde aantal woorden delen door het totaal aantal woorden
@@ -121,15 +121,15 @@ def make_density_table(data):
             else:
                 #Er is nu een nieuw woord gedetecteerd
                 if len(zelfdeWoordAndereBestand) == 0:
-                    #woord is 1 keer voorgekomen in 1 tekstbestand
-                    gestorteerdeLijst = merge_pairs(woordenPerFile)
-                    indexOfTextFile = linearPairs(gestorteerdeLijst, currentTextFile)
+                    #woord voorgekomen in 1 tekstbestand
+                    indexOfTextFile = linearPairs(woordenPerFile, currentTextFile)
 
                     if indexOfTextFile != -1:
                         totalWordCount = woordenPerFile[indexOfTextFile][1]
                     else:
                         totalWordCount = len(words(currentTextFile))
                         woordenPerFile.append([currentTextFile, totalWordCount])
+
                     freq = countForHowManyInTextFile / totalWordCount
                     zelfdeWoordAndereBestand.append([currentTextFile, freq])
 
@@ -147,6 +147,18 @@ def make_density_table(data):
 
             i += 1
 
+        #nu van de laatste het laatste frequentie nog berekenen:
+        indexOfTextFile = linearPairs(woordenPerFile, currentTextFile)
+
+        if indexOfTextFile != -1:
+            totalWordCount = woordenPerFile[indexOfTextFile][1]
+        else:
+            totalWordCount = len(words(currentTextFile))
+            woordenPerFile.append([currentTextFile, totalWordCount])
+
+        freq = countForHowManyInTextFile / totalWordCount
+        zelfdeWoordAndereBestand.append([currentTextFile, freq])
+
         #einde van de rit, sorteer en voeg het laatste woord nog toe
         zelfdeWoordAndereBestand = sortVanGrootNaarKlein(zelfdeWoordAndereBestand)
         res.append([fresh,zelfdeWoordAndereBestand])
@@ -158,13 +170,20 @@ def remove_dups_pairs(data):
     res = []
 
     if len(data) != 0:
-        fresh = data[0]
+        fresh = data[0][0]
+        textFile = data[0][1]
         i = 1
 
-        while len(data) > i:
-            if data[i] != fresh:
-                res.append(fresh)
-                fresh = data[i]
+        while i < len(data): #ga langs de gehele array met data
+            if data[i][0] != fresh: #als het woord niet meer gelijk is, is het een nieuw woord, zet hem dan in de result array
+                res.append(data[i])
+                fresh = data[i][0]
+                textFile = data[i][1]
+            elif (data[i][1] != textFile):
+                res.append(data[i])
+                textFile = data[i][1]
+
             i += 1
+
         res.append(fresh)
     return res
