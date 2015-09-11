@@ -49,6 +49,7 @@ def merge(data):
     return res
 
 def merge_pairs(data):
+    "Dit is een sorteer methode gebaseert op de opdrachten uit de reader."
     if len(data) <= 1:
         res = data[:]
     else:
@@ -77,7 +78,7 @@ def merge_pairs(data):
     return res
 
 def sortVanGrootNaarKlein(data):
-    #Dit is in feite een Merge_Sort, echter sorteert deze van groot => klein ipv klein => groot, en sorteert deze op de 2de index inplaats van de eerste bij de merge_Sort
+    "Dit is in feite een merge_pairs(), echter sorteert deze van groot => klein ipv klein => groot, en sorteert deze op de 2de index inplaats van de eerste bij de merge_pairs()"
 
     if len(data) <= 1:
         res = data[:]

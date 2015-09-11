@@ -22,6 +22,9 @@ def linear(data, value):
 
 
 def linearPairs(data, value):
+    "Deze functie zoekt linear door een paren-array heen, en kijkt hier naar het eerste item, en als je een item hebt gevonden geef je de index terug."
+    "Voorbeeld array: [[a,3],[b,5],[c,6]], je zoekt hierbij op de letters"
+
 
     i = 0
     while i < len(data) and data[i][0] != value:

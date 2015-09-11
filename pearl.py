@@ -1,10 +1,8 @@
 __author__ = 'Egbert'
 
 from sort import merge_pairs, sortVanGrootNaarKlein
-from ordsearch import binary_pairs,linearPairs
-from search import linear
+from ordsearch import linearPairs
 from util import words
-from dup import remove_dups
 
 def make_table(pairs):
     sortedPairs = merge_pairs(pairs)    #sorteer eerst de binnengekomen data
@@ -72,6 +70,8 @@ def make_counted_table(data):
 
             i += 1
 
+        zelfdeWoordAndereBestand.append([currentTextFile,countForHowManyInTextFile]) #laatste is nog niet tegevoegt, hierna wel :)
+
         #Omdat alle woorden nu zijn geweest zitten we aan onze maximale lengte, maar het laatste woord moet nog wel aan de array toegevoegt worden:
         zelfdeWoordAndereBestand = sortVanGrootNaarKlein(zelfdeWoordAndereBestand)
         res.append([fresh,zelfdeWoordAndereBestand])
@@ -80,9 +80,7 @@ def make_counted_table(data):
 def make_density_table(data):
     woordenPerFile = [] # [["Brian.txt",17562],["huppel.txt",127547]]
 
-    sortedPairs = merge_pairs(data)
-
-    pairs = sortedPairs
+    pairs = merge_pairs(data)
 
     res = []
     zelfdeWoordAndereBestand = []
